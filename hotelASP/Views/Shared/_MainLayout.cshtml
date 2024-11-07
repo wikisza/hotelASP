@@ -11,14 +11,23 @@
 			</div>
 
 			<div class="head-center">
-				<h1>HOTEL TROPICAL</h1>
+				<a asp-controller="Home" asp-action="Index">
+					<h1>HOTEL TROPICAL</h1>
+				</a>
 			</div>
 
 			<div class="head-logout">
 				<h3>Wyloguj</h3>
 			</div>
-
 		</header>
+
+		<nav class="nav-bar">
+			<a asp-controller="Home" asp-action="StaticSites" asp-route-name="Rooms">Pokoje</a>
+			<a asp-controller="Home" asp-action="StaticSites" asp-route-name="Reservations">Rezerwacje</a>
+			<a asp-controller="Home" asp-action="StaticSites" asp-route-name="Accomodations">Zakwaterowanie</a>
+			<a asp-controller="Home" asp-action="StaticSites" asp-route-name="Orders">Zamówienia</a>
+		</nav>
+
 		@RenderBody()
 	</body>
 </html>

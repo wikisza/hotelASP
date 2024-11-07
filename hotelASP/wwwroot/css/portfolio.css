@@ -30,8 +30,6 @@ h1,h2,h3,h4,h5,h6{
     align-items: flex-end; 
     justify-content: space-between; 
     padding: 10px; 
-    color: black; 
-    font-family: centaur;
     border-bottom: 10px solid #3E2723;
     padding-bottom: 5px;
 }
@@ -59,4 +57,17 @@ h1,h2,h3,h4,h5,h6{
 
 .head-logout:hover{
     color: white;
+}
+
+.nav-bar {
+    display: flex;
+    align-items: center;
+    align-content:center;
+    justify-content: space-between;
+    padding: 10px;
+}
+
+a{
+    text-decoration:none;
+    color: var(--bodyColor);
 }

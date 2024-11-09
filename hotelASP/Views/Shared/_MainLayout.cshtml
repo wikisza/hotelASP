@@ -1,31 +1,30 @@
 ﻿<html>
 	<head>
-		<title>Stronka</title>
-	<link href="~/css/portfolio.css" rel="stylesheet" />
+		<title>@ViewData["Title"] - hotelASP</title>
+		<link href="~/css/portfolio.css" rel="stylesheet" />
 	</head>
 
 	<body>
-		<header class="header">
-			<div class="head-welcome">
-				<h3>Witaj [użytkownik]</h3>
-			</div>
-
+		<div class="header">
 			<div class="head-center">
 				<a asp-controller="Home" asp-action="Index">
 					<h1>HOTEL TROPICAL</h1>
 				</a>
 			</div>
 
-			<div class="head-logout">
-				<h3>Wyloguj</h3>
+			<div class="head-side">
+
+				<h3>Witaj [użytkownik]</h3>
+				<button type="button">WYLOGUJ</button>
+
 			</div>
-		</header>
+		</div>
 
 		<nav class="nav-bar">
-			<a asp-controller="Home" asp-action="StaticSites" asp-route-name="Rooms">Pokoje</a>
-			<a asp-controller="Home" asp-action="StaticSites" asp-route-name="Reservations">Rezerwacje</a>
-			<a asp-controller="Home" asp-action="StaticSites" asp-route-name="Accomodations">Zakwaterowanie</a>
-			<a asp-controller="Home" asp-action="StaticSites" asp-route-name="Orders">Zamówienia</a>
+		<a asp-controller="Home" asp-action="StaticSites" asp-route-name="Rooms"><h4>Pokoje</h4> </a>|
+		<a asp-controller="Home" asp-action="StaticSites" asp-route-name="Reservations"> <h4>Rezerwacje</h4> </a>|
+		<a asp-controller="Home" asp-action="StaticSites" asp-route-name="Accomodations"> <h4>Zakwaterowanie</h4> </a>|
+		<a asp-controller="Home" asp-action="StaticSites" asp-route-name="Orders"> <h4>Zamówienia</h4></a>
 		</nav>
 
 		@RenderBody()

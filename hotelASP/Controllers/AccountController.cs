@@ -20,7 +20,7 @@ namespace hotelASP.Controllers
         }
         public IActionResult Index()
         {
-            return View(_context.UserAccounts.ToList());
+            return RedirectToAction("Index", "Home");
         }
 
         public IActionResult Registration()
@@ -41,7 +41,7 @@ namespace hotelASP.Controllers
 
                 try
                 {
-                    _context.UserAccounts.Add(account);
+                    _context.Users.Add(account);
                     _context.SaveChanges();
 
                     ModelState.Clear();
@@ -49,9 +49,12 @@ namespace hotelASP.Controllers
                 }
                 catch (DbUpdateException ex)
                 {
-                    ModelState.AddModelError("", "Proszę podać unikalny email lub hasło.");
-                    return View(model);
-                }
+					if (_context.Users.Any(u => u.Email == model.Email || u.Username == model.Username))
+					{
+						ModelState.AddModelError("", "Email lub nazwa użytkownika już istnieje.");
+						return View(model);
+					}
+				}
 
                 return View();
 
@@ -70,21 +73,22 @@ namespace hotelASP.Controllers
         {
             if (ModelState.IsValid) 
             {
-                var user = _context.UserAccounts.Where(x => (x.Username == model.UsernameOrEmail || x.Email == model.UsernameOrEmail) && x.Password == model.Password).FirstOrDefault();
+                var user = _context.Users.Where(x => (x.Username == model.UsernameOrEmail || x.Email == model.UsernameOrEmail) && x.Password == model.Password).FirstOrDefault();
                 if (user != null)
                 {
                     //success
                     var claims = new List<Claim>
                     {
-                        new Claim(ClaimTypes.Name, user.Email),
+                        new Claim(ClaimTypes.Name, user.Username),
                         new Claim("Name", user.FirstName),
+                        new Claim(ClaimTypes.Email, user.Email),
                         new Claim(ClaimTypes.Role, "user"),
                     };
 
                     var claimsIdentity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);
                     HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, new ClaimsPrincipal(claimsIdentity));
 
-                    return RedirectToAction("SecurePage");
+                    return RedirectToAction("Index");
                 }
                 else
                 {
@@ -102,11 +106,5 @@ namespace hotelASP.Controllers
             return RedirectToAction("Index");
         }
 
-        [Authorize]
-        public IActionResult SecurePage()
-        {
-            ViewBag.Name = HttpContext.User.Identity.Name;
-            return View();
-        }
     }
 }

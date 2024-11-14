@@ -28,15 +28,10 @@ h1,h2,h3,h4,h5,h6{
 
 .header {
     display: flex;
-    align-items: flex-end;
+    align-content:flex-end;
     justify-content: space-between;
     border-bottom: 10px solid var(--bodyColor);
     padding-bottom: 5px;
-}
-
-.head-center{
-    color: white; 
-    margin: 0; 
 }
 
 .head-center a{
@@ -44,15 +39,19 @@ h1,h2,h3,h4,h5,h6{
     color: var(--bodyColor);
 }
 
+.head-center a:hover{
+    color: var(--violet);
+}
+
 .head-side {
     display:flex;
     font-size: 20px;
     margin: 0;
-    text-decoration: none; 
+    text-decoration: none;
     color: black;
     font-size: 20px;
     padding-right: 20px;
-    justify-content:flex-end;
+    justify-content: flex-end;
 }
 
 .head-side button {
@@ -66,6 +65,19 @@ h1,h2,h3,h4,h5,h6{
 
 .head-side button:hover{
     background-color:var(--violet);
+}
+
+.head-welcome {
+    margin: 0;
+    display:flex;
+    justify-content: flex-end;
+    align-items: flex-end;
+}
+
+.head-log-reg{
+    display:flex;
+    justify-content:flex-end;
+    align-items:flex-end;
 }
 
 .nav-bar {
@@ -84,4 +96,72 @@ h1,h2,h3,h4,h5,h6{
 
 .nav-bar a:hover{
     color:var(--violet);
+}
+
+.container {
+    text-align: center;
+    background-image: url('../assets/graphics/login_background.jpg');
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size:cover;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+    display: flex;
+    flex-direction: column;
+    position: relative;
+    justify-content: center;
+    align-items: center;
+    min-height:90vh;
+}
+
+section {
+    backdrop-filter: blur(30px);
+    border-radius: 30px;
+    width: 50%;
+    margin-top: 30px;
+    padding: 20px;
+    box-shadow: 0px 0px 20px rgba(26, 25, 25, 0.658);
+}
+
+h1 {
+    color: white;
+    font-size: 40px;
+    font-weight: 450;
+    margin: 0;
+}
+
+form {
+    margin-bottom: 20px;
+}
+
+label {
+    display: block;
+    margin-top: 10px;
+    color: white;
+}
+
+input, .loginBtn {
+    margin-top: 5px;
+    background-color: var(--sand);
+    color: #000000; 
+    border: 2px solid #6A704C; 
+    border-radius: 5px;
+    padding: 10px;
+}
+
+.loginBtn {
+    cursor: pointer;
+}
+
+.loginBtn:hover {
+    background-color: var(--violet);
+}
+
+img {
+    width: 160px;
+    background-color: var(--sand);
+    padding: 40px;
+    border-radius: 10px;
+    box-shadow: 0 0 20px #3E2723;
 }

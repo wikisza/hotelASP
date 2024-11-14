@@ -2,9 +2,13 @@
 	<head>
 		<title>@ViewData["Title"] - hotelASP</title>
 		<link href="~/css/portfolio.css" rel="stylesheet" />
+		<meta charset="utf-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
 	</head>
 
 	<body>
+	@if (Context.User.Identity.Name != null)
+		{	
 		<div class="header">
 			<div class="head-center">
 				<a asp-controller="Home" asp-action="Index">
@@ -13,20 +17,22 @@
 			</div>
 
 			<div class="head-side">
-
-				<h3>Witaj [użytkownik]</h3>
-				<button type="button">WYLOGUJ</button>
+				
+				@await Html.PartialAsync("_LoginPartial")
 
 			</div>
 		</div>
+		
 
-		<nav class="nav-bar">
-		<a asp-controller="Rooms" asp-action="Index"> <h4>Pokoje</h4> </a>|
-		<a asp-controller="Home" asp-action="StaticSites" asp-route-name="Reservations"> <h4>Rezerwacje</h4> </a>|
-		<a asp-controller="Home" asp-action="StaticSites" asp-route-name="Accomodations"> <h4>Zakwaterowanie</h4> </a>|
-		<a asp-controller="Home" asp-action="StaticSites" asp-route-name="Orders"> <h4>Zamówienia</h4></a>
-		</nav>
+		@await Html.PartialAsync("_navigationBar")
+		}
+		
 
 		@RenderBody()
+
+	<script src="~/lib/jquery/dist/jquery.min.js"></script>
+	<script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+	<script src="~/js/site.js" asp-append-version="true"></script>
+	@await RenderSectionAsync("Scripts", required: false)
 	</body>
 </html>

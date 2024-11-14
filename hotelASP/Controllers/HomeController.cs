@@ -1,4 +1,5 @@
 using hotelASP.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Diagnostics;
 
@@ -12,12 +13,12 @@ namespace hotelASP.Controllers
         {
             _logger = logger;
         }
-
+        [Authorize]
         public IActionResult Index()
         {
             return View();
         }
-
+        [Authorize]
         public IActionResult StaticSites(string name)
         {
             return View(name);

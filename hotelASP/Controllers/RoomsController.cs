@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using hotelASP.Data;
 using hotelASP.Models;
+using Microsoft.AspNetCore.Authorization;
 
 namespace hotelASP.Controllers
 {
@@ -20,6 +21,7 @@ namespace hotelASP.Controllers
         }
 
         // GET: Rooms
+        [Authorize]
         public async Task<IActionResult> Index()
         {
             return View(await _context.Room.ToListAsync());

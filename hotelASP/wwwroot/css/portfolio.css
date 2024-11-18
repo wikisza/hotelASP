@@ -165,3 +165,41 @@ img {
     border-radius: 10px;
     box-shadow: 0 0 20px #3E2723;
 }
+
+table {
+    width: 800px;
+    border-collapse: collapse;
+    overflow: hidden;
+    box-shadow: 0 0 20px rgba(0,0,0,0.1);
+}
+
+th,td {
+    padding: 15px;
+    background-color: rgba(255,255,255,0.2);
+    color: #fff;
+}
+
+th{
+    text-align:left;
+}
+
+thead th{
+    background-color:#7b668dff;
+}
+
+tbody td{
+    color:black;
+}
+
+tbody{
+    background-color:white;
+}
+tbody tr:hover{
+    background-color:#89acd5ff;
+}
+
+.roomsTable{
+    display:flex;
+    align-items:center;
+    justify-content:center;
+}

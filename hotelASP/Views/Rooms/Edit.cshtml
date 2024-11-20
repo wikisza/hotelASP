@@ -4,9 +4,10 @@
     ViewData["Title"] = "Edit";
 }
 
-<h1>Edit</h1>
+<h1>Edytowanie</h1>
 
-<h4>Room</h4>
+<h4>
+    Pokój nr @Html.DisplayFor(Model => Model.Id_room)</h4>
 <hr />
 <div class="row">
     <div class="col-md-4">
@@ -21,9 +22,23 @@
 
             <div class="form-group">
                 <label asp-for="Is_taken" class="control-label"></label>
-                <input asp-for="Is_taken" class="form-control" />
+                <select asp-for="Is_taken" class="form-control">
+                    @{
+                        if(Model.Is_taken == 0)
+                        {
+                            <option value="0" selected>Wolny</option>
+                            <option value="1">Zajęty</option>
+                        }
+                        else
+                        {
+                            <option value="0">Wolny</option>
+                            <option value="1" selected>Zajęty</option>
+                        }
+                    }
+                </select>
                 <span asp-validation-for="Is_taken" class="text-danger"></span>
-            </div>
+            </div>  
+
 
             <div class="form-group">
                 <label asp-for="Price"  class="control-label"></label>

@@ -10,6 +10,12 @@
 				<th>
 					Pokoje
 				</th>
+				<th>
+					Cena
+				</th>
+				<th>
+					Czy zajęty
+				</th>
 				<th></th>
 			</tr>
 		</thead>
@@ -20,6 +26,22 @@
 					<td>
 						@Html.DisplayFor(modelItem => item.Description)
 					</td>
+					<td>
+						@Html.DisplayFor(modelItem => item.Price)
+					</td>
+					<td>
+						@{
+							if (item.Is_taken == 0)
+							{
+								<span>Wolny</span>
+							}
+							else
+							{
+								<span>Zajęty</span>
+							}
+						}
+					</td>
+
 					<td>
 						<a asp-action="Edit" asp-route-id="@item.Id_room">Edit</a> |
 						<a asp-action="Details" asp-route-id="@item.Id_room">Details</a> |

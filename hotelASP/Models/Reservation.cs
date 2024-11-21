@@ -7,9 +7,9 @@ namespace hotelASP.Models
 		[Key]
 		public int Id_reservation { get; set; }
 		[Required]
-		public DateOnly Date_from { get; set; }
+		public DateTime Date_from { get; set; }
 		[Required]
-		public DateOnly Date_to { get; set; }
+		public DateTime Date_to { get; set; }
 		[Required]
 		public string First_name { get; set; }
 		[Required]

@@ -203,3 +203,15 @@ tbody tr:hover{
     align-items:center;
     justify-content:center;
 }
+
+.partialView{
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    flex-direction:column;
+}
+
+.mainView{
+    display:flex;
+    
+}

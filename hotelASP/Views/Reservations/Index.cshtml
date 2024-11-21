@@ -1,61 +1,19 @@
 ﻿@model IEnumerable<hotelASP.Models.Reservation>
 
 @{
-    ViewData["Title"] = "Index";
+	ViewData["Title"] = "Lista rezerwacji";
 }
 
+<div class="mainView">
 
+	<div class="sideBar">
+		<a asp-action="CurrentReservations" asp-controller="Reservations">Aktualne rezerwacje</a>
+		<a asp-action="HistoryReservations" asp-controller="Reservations">Historia rezerwacji</a>
+	</div>
 
-<h1>Index</h1>
+	<div class="partialView">
 
-<p>
-    <a asp-action="Create">Create New</a>
-</p>
-<table class="table">
-    <thead>
-        <tr>
-            <th>
-                @Html.DisplayNameFor(model => model.Date_from)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Date_to)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.First_name)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Last_name)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Id_room)
-            </th>
-            <th></th>
-        </tr>
-    </thead>
-    <tbody>
-@foreach (var item in Model) {
-        <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.Date_from)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Date_to)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.First_name)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Last_name)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Id_room)
-            </td>
-            <td>
-                <a asp-action="Edit" asp-route-id="@item.Id_reservation">Edit</a> |
-                <a asp-action="Details" asp-route-id="@item.Id_reservation">Details</a> |
-                <a asp-action="Delete" asp-route-id="@item.Id_reservation">Delete</a>
-            </td>
-        </tr>
-}
-    </tbody>
-</table>
+		<div id="calendar"></div>
+
+	</div>
+</div>

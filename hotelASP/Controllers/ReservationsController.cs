@@ -23,8 +23,8 @@ namespace hotelASP.Controllers
 				.Select(r => new
 				{
 					start = r.Date_from.ToString("yyyy-MM-dd"),
-					end = r.Date_to.ToString("yyyy-MM-dd"),
-					title = r.First_name + ' ' + r.Last_name,
+                    end = r.Date_to.AddDays(1).ToString("yyyy-MM-dd"),
+                    title = r.First_name + ' ' + r.Last_name,
 					id_room = r.Id_room
 				})
 				.ToList();
@@ -41,7 +41,28 @@ namespace hotelASP.Controllers
         [Authorize]
 		public async Task<IActionResult> Index()
 		{
-			return View(await _context.Reservations.ToListAsync());
+			return View();
+		}
+
+		public async Task<IActionResult> CurrentReservations()
+		{
+			var today = DateTime.Today;
+
+			var reservations = await _context.Reservations
+				.Where(r => r.Date_to >= today) 
+				.ToListAsync();
+
+			return View(reservations);
+		}
+
+		public async Task<IActionResult> HistoryReservations()
+		{
+			var today = DateTime.Today;
+
+			var reservations = await _context.Reservations
+				.Where(r => r.Date_to <= today)
+				.ToListAsync();
+			return View(reservations);
 		}
 
 		// GET: Reservations/Details/5

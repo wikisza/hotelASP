@@ -16,15 +16,18 @@ namespace hotelASP.Controllers
 			_context = context;
 		}
 
-        [HttpGet("/get_reservations")]
-        public JsonResult GetReservations()
+		[HttpGet("/get_current_reservations")]
+		public JsonResult GetReservations()
 		{
+			var today = DateTime.Today;
 			var reservations = _context.Reservations
+				.Where(r => r.Date_to >= today)
 				.Select(r => new
 				{
-					start = r.Date_from.ToString("yyyy-MM-dd"),
-                    end = r.Date_to.AddDays(1).ToString("yyyy-MM-dd"),
-                    title = r.First_name + ' ' + r.Last_name,
+					start = r.Date_from.Date.AddHours(14).ToString("yyyy-MM-ddTHH:mm:ss"),
+					end = r.Date_to.Date.AddHours(10).ToString("yyyy-MM-ddTHH:mm:ss"),
+					title = r.First_name + ' ' + r.Last_name,
+					description = $"Pokój: {r.Id_room}",
 					id_room = r.Id_room
 				})
 				.ToList();
@@ -32,13 +35,32 @@ namespace hotelASP.Controllers
 			return Json(reservations);
 		}
 
-        public IActionResult Calendar()
-        {
-            return View();
-        }
+		[HttpGet("/get_old_reservations")]
+		public JsonResult GetOldReservations()
+		{
+			var yesterday = DateTime.Today.AddDays(-1);
+			var oldReservations = _context.Reservations
+				.Where(r => r.Date_to <= yesterday)
+				.Select(r => new
+				{
+					start = r.Date_from.Date.AddHours(14).ToString("yyyy-MM-ddTHH:mm:ss"),
+					end = r.Date_to.Date.AddHours(10).ToString("yyyy-MM-ddTHH:mm:ss"),
+					title = r.First_name + ' ' + r.Last_name,
+					description = $"Pokój: {r.Id_room}",
+					id_room = r.Id_room
+				})
+				.ToList();
 
-        // GET: ReservationsController
-        [Authorize]
+			return Json(oldReservations);
+		}
+
+		public IActionResult Calendar()
+		{
+			return View();
+		}
+
+		// GET: ReservationsController
+		[Authorize]
 		public async Task<IActionResult> Index()
 		{
 			return View();
@@ -49,7 +71,7 @@ namespace hotelASP.Controllers
 			var today = DateTime.Today;
 
 			var reservations = await _context.Reservations
-				.Where(r => r.Date_to >= today) 
+				.Where(r => r.Date_to >= today)
 				.ToListAsync();
 
 			return View(reservations);
@@ -57,10 +79,10 @@ namespace hotelASP.Controllers
 
 		public async Task<IActionResult> HistoryReservations()
 		{
-			var today = DateTime.Today;
+			var yesterday = DateTime.Today.AddDays(-1);
 
 			var reservations = await _context.Reservations
-				.Where(r => r.Date_to <= today)
+				.Where(r => r.Date_to <= yesterday)
 				.ToListAsync();
 			return View(reservations);
 		}
@@ -74,7 +96,19 @@ namespace hotelASP.Controllers
 			}
 
 			var reservation = await _context.Reservations
-				.FirstOrDefaultAsync(m => m.Id_reservation == id);
+		.Select(r => new
+		{
+			r.Id_reservation,
+			r.Date_from,
+			r.Date_to,
+			CheckIn = r.Date_from.Date.AddHours(14),
+			CheckOut = r.Date_to.Date.AddHours(10),
+			r.First_name,
+			r.Last_name,
+			r.Id_room
+		})
+		.FirstOrDefaultAsync(m => m.Id_reservation == id);
+
 			if (reservation == null)
 			{
 				return NotFound();

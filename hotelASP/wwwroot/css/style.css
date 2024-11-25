@@ -208,10 +208,54 @@ tbody tr:hover{
     display:flex;
     align-items:center;
     justify-content:center;
-    flex-direction:column;
 }
 
 .mainView{
     display:flex;
-    
+    flex-direction:column;
+    justify-content:center;
+    align-items:center;
 }
+.reservationBar{
+    display:flex;
+}
+.reservationBar a, #btn {
+    margin-left: 10px;
+    background-color: var(--backgroundColor);
+    border: 3px solid var(--brown);
+    border-radius: 5px;
+    font-family: var(--headerFont);
+    font-size: large;
+    text-decoration: none;
+    color: var(--brown);
+    margin-bottom: 1rem;
+    padding-left: 5px;
+    padding-right: 5px;
+}
+
+.reservationBar a:hover {
+    background-color: var(--violet);
+}
+
+.currentBar{
+    display:flex;
+    justify-content:space-between;
+}
+
+#labelCurrent{
+    color:var(--brown);
+    font-family:var(--headerFont);
+    font-size:large;
+}
+
+#calendar{
+    width: 60vw;
+}
+
+.mainPage{
+    display:flex;
+    flex-direction:column;
+    justify-content:center;
+    align-items:center;
+}
+    

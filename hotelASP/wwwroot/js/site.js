@@ -17,17 +17,27 @@ document.addEventListener('DOMContentLoaded', function () {
         initialView: 'dayGridMonth',
         firstDay: '1',
         events: function (fetchInfo, successCallback, failureCallback) {
-            fetch('/get_reservations')
-                .then(response => response.json())
-                .then(data => {
-                    data.forEach((event, index) => {
+            Promise.all([
+                fetch('/get_current_reservations').then(response => response.json()),
+                fetch('/get_old_reservations').then(response => response.json())
+            ])
+                .then(dataArray => {
+                    const [currentReservations, oldReservations] = dataArray;
+
+                    currentReservations.forEach((event, index) => {
                         const colorIndex = index % darkPalette.length;
                         event.backgroundColor = darkPalette[colorIndex];
                         event.borderColor = darkPalette[colorIndex];
                     });
 
-                    console.log('Events with colors:', data);
-                    successCallback(data);
+                    oldReservations.forEach(event => {
+                        event.backgroundColor = 'gray';
+                        event.borderColor = event.backgroundColor;
+                    });
+
+                    const allEvents = [...currentReservations, ...oldReservations];
+                    console.log('Events with colors:', dataArray);
+                    successCallback(allEvents);
                 })
                 .catch(error => {
                     console.error('Error fetching events:', error);
@@ -45,6 +55,37 @@ document.addEventListener('DOMContentLoaded', function () {
             month: 'Miesiąc',
             week: 'Tydzień',
             day: 'Dzień'
+        },
+        eventClick: function (info) {
+            // Tworzenie okna dialogowego
+            const modal = document.createElement('div');
+            modal.className = 'modal';
+            modal.style.position = 'fixed';
+            modal.style.left = '50%';
+            modal.style.top = '50%';
+            modal.style.transform = 'translate(-50%, -50%)';
+            modal.style.backgroundColor = '#fff';
+            modal.style.padding = '20px';
+            modal.style.boxShadow = '0 4px 8px rgba(0, 0, 0, 0.2)';
+            modal.style.borderRadius = '8px';
+            modal.style.zIndex = '1000';
+
+            // Dodawanie informacji o wydarzeniu
+            modal.innerHTML = `
+                <h3>Informacje o rezerwacji</h3>
+                <p><strong>Tytuł:</strong> ${info.event.title}</p>
+                <p><strong>Data rozpoczęcia:</strong> ${new Date(info.event.start).toLocaleString()}</p>
+                <p><strong>Data zakończenia:</strong> ${new Date(info.event.end).toLocaleString()}</p>
+                <p><strong>Opis:</strong> ${info.event.extendedProps.description || 'Brak opisu'}</p>
+                <button id="closeModal" style="margin-top: 10px;">Zamknij</button>
+            `;
+
+            document.body.appendChild(modal);
+
+            // Obsługa zamknięcia okna
+            document.getElementById('closeModal').addEventListener('click', function () {
+                document.body.removeChild(modal);
+            });
         }
     });
 

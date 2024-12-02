@@ -36,7 +36,6 @@ document.addEventListener('DOMContentLoaded', function () {
                     });
 
                     const allEvents = [...currentReservations, ...oldReservations];
-                    console.log('Events with colors:', dataArray);
                     successCallback(allEvents);
                 })
                 .catch(error => {
@@ -57,7 +56,6 @@ document.addEventListener('DOMContentLoaded', function () {
             day: 'Dzień'
         },
         eventClick: function (info) {
-            // Tworzenie okna dialogowego
             const modal = document.createElement('div');
             modal.className = 'modal';
             modal.style.position = 'fixed';
@@ -70,7 +68,6 @@ document.addEventListener('DOMContentLoaded', function () {
             modal.style.borderRadius = '8px';
             modal.style.zIndex = '1000';
 
-            // Dodawanie informacji o wydarzeniu
             modal.innerHTML = `
                 <h3>Informacje o rezerwacji</h3>
                 <p><strong>Tytuł:</strong> ${info.event.title}</p>
@@ -82,7 +79,6 @@ document.addEventListener('DOMContentLoaded', function () {
 
             document.body.appendChild(modal);
 
-            // Obsługa zamknięcia okna
             document.getElementById('closeModal').addEventListener('click', function () {
                 document.body.removeChild(modal);
             });

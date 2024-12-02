@@ -16,6 +16,8 @@ namespace hotelASP.Controllers
 			_context = context;
 		}
 
+		
+
 		[HttpGet("/get_current_reservations")]
 		public JsonResult GetReservations()
 		{
@@ -96,18 +98,18 @@ namespace hotelASP.Controllers
 			}
 
 			var reservation = await _context.Reservations
-		.Select(r => new
-		{
-			r.Id_reservation,
-			r.Date_from,
-			r.Date_to,
-			CheckIn = r.Date_from.Date.AddHours(14),
-			CheckOut = r.Date_to.Date.AddHours(10),
-			r.First_name,
-			r.Last_name,
-			r.Id_room
-		})
-		.FirstOrDefaultAsync(m => m.Id_reservation == id);
+				.Select(r => new
+				{
+					r.Id_reservation,
+					r.Date_from,
+					r.Date_to,
+					CheckIn = r.Date_from.Date.AddHours(14),
+					CheckOut = r.Date_to.Date.AddHours(10),
+					r.First_name,
+					r.Last_name,
+					r.Id_room
+				})
+				.FirstOrDefaultAsync(m => m.Id_reservation == id);
 
 			if (reservation == null)
 			{
@@ -130,6 +132,21 @@ namespace hotelASP.Controllers
 		{
 			if (ModelState.IsValid)
 			{
+				// Sprawdzenie, czy pokój jest dostępny w wybranym terminie
+				var overlappingReservations = await _context.Reservations
+					.Where(r => r.Id_room == reservation.Id_room &&
+								r.Date_from < reservation.Date_to &&
+								r.Date_to > reservation.Date_from)
+					.ToListAsync();
+
+				if (overlappingReservations.Any())
+				{
+					// Jeśli istnieją kolidujące rezerwacje, zwróć odpowiedni komunikat
+					ModelState.AddModelError(string.Empty, "Pokój jest już zajęty w wybranym terminie.");
+					return View(reservation);
+				}
+
+				// Dodanie rezerwacji
 				_context.Add(reservation);
 				await _context.SaveChangesAsync();
 				return RedirectToAction(nameof(Index));

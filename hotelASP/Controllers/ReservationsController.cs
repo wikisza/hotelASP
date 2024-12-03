@@ -56,6 +56,27 @@ namespace hotelASP.Controllers
 			return Json(oldReservations);
 		}
 
+		[HttpGet]
+		public async Task<JsonResult> GetAvailableRooms(DateTime dateFrom, DateTime dateTo)
+		{
+			// Pobierz pokoje, które nie są zajęte w podanym zakresie dat
+			var availableRooms = await _context.Room
+				.Where(room => !_context.Reservations
+					.Any(reservation =>
+						reservation.Id_room == room.Id_room &&
+						reservation.Date_from < dateTo &&
+						reservation.Date_to > dateFrom))
+				.Select(room => new
+				{
+					room.Id_room,
+					room.Description
+				})
+				.ToListAsync();
+
+			return Json(availableRooms);
+		}
+
+
 		public IActionResult Calendar()
 		{
 			return View();

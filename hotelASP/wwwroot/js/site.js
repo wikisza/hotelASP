@@ -55,6 +55,7 @@ document.addEventListener('DOMContentLoaded', function () {
             week: 'Tydzień',
             day: 'Dzień'
         },
+        
         eventClick: function (info) {
             const modal = document.createElement('div');
             modal.className = 'modal';
@@ -87,3 +88,28 @@ document.addEventListener('DOMContentLoaded', function () {
 
     calendar.render();
 });
+
+
+document.getElementById('dateFrom').addEventListener('change', loadAvailableRooms);
+document.getElementById('dateTo').addEventListener('change', loadAvailableRooms);
+
+async function loadAvailableRooms() {
+    const dateFrom = document.getElementById('dateFrom').value;
+    const dateTo = document.getElementById('dateTo').value;
+
+    if (dateFrom && dateTo) {
+        const response = await fetch(`/Reservations/GetAvailableRooms?dateFrom=${dateFrom}&dateTo=${dateTo}`);
+        const rooms = await response.json();
+
+        const roomSelect = document.getElementById('roomSelect');
+        roomSelect.innerHTML = '<option value="">-- Wybierz pokój --</option>'; // Resetuj listę
+
+        rooms.forEach(room => {
+            const options = document.createElement('option');
+            options.value = room.Id_room;
+            options.textContent = `${room.Description} (Numer pokoju: ${room.Id_room})`;
+            roomSelect.appendChild(options);
+        });
+    }
+}
+

@@ -102,12 +102,12 @@ async function loadAvailableRooms() {
         const rooms = await response.json();
 
         const roomSelect = document.getElementById('roomSelect');
-        roomSelect.innerHTML = '<option value="">-- Wybierz pokój --</option>'; // Resetuj listę
+        roomSelect.innerHTML = '<option value="">-- Wybierz pokój --</option>';
 
         rooms.forEach(room => {
             const options = document.createElement('option');
-            options.value = room.Id_room;
-            options.textContent = `${room.Description} (Numer pokoju: ${room.Id_room})`;
+            options.value = room.id_room;
+            options.textContent = `${room.description} (Numer pokoju: ${room.id_room})`;
             roomSelect.appendChild(options);
         });
     }

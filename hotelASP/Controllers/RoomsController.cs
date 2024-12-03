@@ -42,7 +42,7 @@ namespace hotelASP.Controllers
 					.AnyAsync(reservation =>
 						reservation.Id_room == room.Id_room &&
 						reservation.Date_from <= now &&
-						reservation.Date_to >= now);
+						reservation.Date_to.AddDays(1) >= now);
 
 				if (hasActiveReservation)
 				{

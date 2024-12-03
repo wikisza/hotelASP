@@ -16,12 +16,14 @@
 				<div asp-validation-summary="ModelOnly" class="text-danger"></div>
 				<div class="form-group">
 					<label class="control-label">Data rozpoczęcia pobytu:</label>
-					<input type="date" id="dateFrom" asp-for="Date_from" class="form-control" />
+					<input type="datetime-local" id="dateFrom" asp-for="Date_from" class="form-control"
+						   value="@DateTime.Now.Date.AddHours(14).ToString("yyyy-MM-ddTHH:mm")" />
 					<span asp-validation-for="Date_from" class="text-danger"></span>
 				</div>
 				<div class="form-group">
 					<label class="control-label">Data zakończenia pobytu:</label>
-					<input type="date" id="dateTo" asp-for="Date_to" class="form-control" />
+					<input type="datetime-local" id="dateTo" asp-for="Date_to" class="form-control"
+						   value="@DateTime.Now.Date.AddDays(1).AddHours(10).ToString("yyyy-MM-ddTHH:mm")" />
 					<span asp-validation-for="Date_to" class="text-danger"></span>
 				</div>
 				<div class="form-group">

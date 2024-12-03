@@ -11,7 +11,10 @@
 		<thead>
 			<tr>
 				<th>
-					Pokoje
+					Numer pokoju
+				</th>
+				<th>
+					Opis pokoju
 				</th>
 				<th>
 					Cena
@@ -19,13 +22,16 @@
 				<th>
 					Czy zajęty
 				</th>
-				<th></th>
+				<th>Opcje</th>
 			</tr>
 		</thead>
 		<tbody>
 			@foreach (var item in Model)
 			{
 				<tr>
+					<td>
+						@Html.DisplayFor(modelItem => item.Id_room)
+					</td>
 					<td>
 						@Html.DisplayFor(modelItem => item.Description)
 					</td>

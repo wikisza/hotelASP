@@ -154,9 +154,18 @@ namespace hotelASP.Controllers
 		[ValidateAntiForgeryToken]
 		public async Task<IActionResult> Create([Bind("Id_reservation,Date_from, Date_to, First_name, Last_name, Id_room")] Reservation reservation)
 		{
+			if (reservation.Date_from.TimeOfDay != new TimeSpan(14, 0, 0))
+			{
+				reservation.Date_from = reservation.Date_from.Date.AddHours(14); // Ustaw 14:00
+			}
+
+			if (reservation.Date_to.TimeOfDay != new TimeSpan(10, 0, 0))
+			{
+				reservation.Date_to = reservation.Date_to.Date.AddHours(10); // Ustaw 10:00
+			}
+
 			if (ModelState.IsValid)
 			{
-				// Sprawdzenie, czy pokój jest dostępny w wybranym terminie
 				var overlappingReservations = await _context.Reservations
 					.Where(r => r.Id_room == reservation.Id_room &&
 								r.Date_from < reservation.Date_to &&
@@ -165,12 +174,10 @@ namespace hotelASP.Controllers
 
 				if (overlappingReservations.Any())
 				{
-					// Jeśli istnieją kolidujące rezerwacje, zwróć odpowiedni komunikat
 					ModelState.AddModelError(string.Empty, "Pokój jest już zajęty w wybranym terminie.");
 					return View(reservation);
 				}
 
-				// Dodanie rezerwacji
 				_context.Add(reservation);
 				await _context.SaveChangesAsync();
 				return RedirectToAction(nameof(Index));

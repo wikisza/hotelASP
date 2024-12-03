@@ -68,6 +68,9 @@ namespace hotelASP.Controllers
 			return View();
 		}
 
+		
+
+
 		public async Task<IActionResult> CurrentReservations()
 		{
 			var today = DateTime.Today;

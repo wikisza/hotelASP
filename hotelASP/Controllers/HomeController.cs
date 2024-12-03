@@ -1,6 +1,7 @@
 using hotelASP.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using System.Diagnostics;
 
 namespace hotelASP.Controllers
@@ -8,6 +9,7 @@ namespace hotelASP.Controllers
     public class HomeController : Controller
     {
         private readonly ILogger<HomeController> _logger;
+
 
         public HomeController(ILogger<HomeController> logger)
         {
@@ -18,7 +20,9 @@ namespace hotelASP.Controllers
         {
             return View();
         }
-        [Authorize]
+
+
+		[Authorize]
         public IActionResult StaticSites(string name)
         {
             return View(name);

@@ -24,11 +24,44 @@ namespace hotelASP.Controllers
         [Authorize]
         public async Task<IActionResult> Index()
         {
+            await UpdateRoomStatuses();
             return View(await _context.Room.ToListAsync());
         }
 
-        // GET: Rooms/Details/5
-        public async Task<IActionResult> Details(int? id)
+		public async Task<IActionResult> UpdateRoomStatuses()
+		{
+			var now = DateTime.Now;
+
+			// Pobranie wszystkich pokoi
+			var rooms = await _context.Room.ToListAsync();
+
+			foreach (var room in rooms)
+			{
+				// Sprawdzenie, czy pokój ma trwającą rezerwację
+				var hasActiveReservation = await _context.Reservations
+					.AnyAsync(reservation =>
+						reservation.Id_room == room.Id_room &&
+						reservation.Date_from <= now &&
+						reservation.Date_to >= now);
+
+				if (hasActiveReservation)
+				{
+					room.Is_taken = 1;
+				}
+				else
+				{
+					room.Is_taken = 0;
+				}
+			}
+
+			// Zapisanie zmian w bazie danych
+			await _context.SaveChangesAsync();
+
+			return RedirectToAction(nameof(Index));
+		}
+
+		// GET: Rooms/Details/5
+		public async Task<IActionResult> Details(int? id)
         {
             if (id == null)
             {

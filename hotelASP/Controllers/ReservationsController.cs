@@ -16,47 +16,47 @@ namespace hotelASP.Controllers
 			_context = context;
 		}
 
-		
 
-		[HttpGet("/get_current_reservations")]
-		public JsonResult GetReservations()
-		{
-			var today = DateTime.Today;
-			var reservations = _context.Reservations
-				.Where(r => r.Date_to >= today)
-				.Select(r => new
-				{
-					start = r.Date_from.Date.AddHours(14).ToString("yyyy-MM-ddTHH:mm:ss"),
-					end = r.Date_to.Date.AddHours(10).ToString("yyyy-MM-ddTHH:mm:ss"),
-					title = r.First_name + ' ' + r.Last_name,
-					description = $"Pokój: {r.Id_room}",
-					id_room = r.Id_room
-				})
-				.ToList();
 
-			return Json(reservations);
-		}
+        [HttpGet("/get_current_reservations")]
+        public JsonResult GetReservations()
+        {
+            var now = DateTime.Now;
+            var reservations = _context.Reservations
+                .Where(r => r.Date_to > now) // Uwzględnienie dokładnej godziny
+                .Select(r => new
+                {
+                    start = r.Date_from.Date.AddHours(14).ToString("yyyy-MM-ddTHH:mm:ss"),
+                    end = r.Date_to.Date.AddHours(10).ToString("yyyy-MM-ddTHH:mm:ss"),
+                    title = r.First_name + ' ' + r.Last_name + ", pokój: " + r.Id_room,
+                    description = $"Pokój: {r.Id_room}",
+                    id_room = r.Id_room
+                })
+                .ToList();
 
-		[HttpGet("/get_old_reservations")]
-		public JsonResult GetOldReservations()
-		{
-			var yesterday = DateTime.Today.AddDays(-1);
-			var oldReservations = _context.Reservations
-				.Where(r => r.Date_to <= yesterday)
-				.Select(r => new
-				{
-					start = r.Date_from.Date.AddHours(14).ToString("yyyy-MM-ddTHH:mm:ss"),
-					end = r.Date_to.Date.AddHours(10).ToString("yyyy-MM-ddTHH:mm:ss"),
-					title = r.First_name + ' ' + r.Last_name,
-					description = $"Pokój: {r.Id_room}",
-					id_room = r.Id_room
-				})
-				.ToList();
+            return Json(reservations);
+        }
 
-			return Json(oldReservations);
-		}
+        [HttpGet("/get_old_reservations")]
+        public JsonResult GetOldReservations()
+        {
+            var now = DateTime.Now;
+            var oldReservations = _context.Reservations
+                .Where(r => r.Date_to <= now) 
+                .Select(r => new
+                {
+                    start = r.Date_from.Date.AddHours(14).ToString("yyyy-MM-ddTHH:mm:ss"),
+                    end = r.Date_to.Date.AddHours(10).ToString("yyyy-MM-ddTHH:mm:ss"),
+                    title = r.First_name + ' ' + r.Last_name + ", pokój: " + r.Id_room,
+                    description = $"Pokój: {r.Id_room}",
+                    id_room = r.Id_room
+                })
+                .ToList();
 
-		[HttpGet]
+            return Json(oldReservations);
+        }
+
+        [HttpGet]
 		public async Task<JsonResult> GetAvailableRooms(DateTime dateFrom, DateTime dateTo)
 		{
 			// Pobierz pokoje, które nie są zajęte w podanym zakresie dat
@@ -94,10 +94,11 @@ namespace hotelASP.Controllers
 
 		public async Task<IActionResult> CurrentReservations()
 		{
-			var today = DateTime.Today;
+			var today = DateTime.Now;
 
 			var reservations = await _context.Reservations
 				.Where(r => r.Date_to >= today)
+				.OrderBy(r => r.Date_from)
 				.ToListAsync();
 
 			return View(reservations);
@@ -105,10 +106,11 @@ namespace hotelASP.Controllers
 
 		public async Task<IActionResult> HistoryReservations()
 		{
-			var yesterday = DateTime.Today.AddDays(-1);
+			var yesterday = DateTime.Now;
 
 			var reservations = await _context.Reservations
 				.Where(r => r.Date_to <= yesterday)
+				.OrderByDescending (r => r.Date_from)
 				.ToListAsync();
 			return View(reservations);
 		}

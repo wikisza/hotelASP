@@ -89,9 +89,26 @@ document.addEventListener('DOMContentLoaded', function () {
     calendar.render();
 });
 
+document.addEventListener('DOMContentLoaded', () => {
+    const dateFromInput = document.getElementById('dateFrom');
+    const dateToInput = document.getElementById('dateTo');
 
-document.getElementById('dateFrom').addEventListener('change', loadAvailableRooms);
-document.getElementById('dateTo').addEventListener('change', loadAvailableRooms);
+    if (!dateFromInput.value) {
+        const today = new Date();
+        dateFromInput.value = today.toISOString().split('T')[0];
+    }
+
+    if (!dateToInput.value) {
+        const tomorrow = new Date();
+        tomorrow.setDate(tomorrow.getDate() + 1);
+        dateToInput.value = tomorrow.toISOString().split('T')[0];
+    }
+
+    loadAvailableRooms();
+
+    dateFromInput.addEventListener('change', loadAvailableRooms);
+    dateToInput.addEventListener('change', loadAvailableRooms);
+});
 
 async function loadAvailableRooms() {
     const dateFrom = document.getElementById('dateFrom').value;
@@ -105,11 +122,12 @@ async function loadAvailableRooms() {
         roomSelect.innerHTML = '<option value="">-- Wybierz pokój --</option>';
 
         rooms.forEach(room => {
-            const options = document.createElement('option');
-            options.value = room.id_room;
-            options.textContent = `${room.description} (Numer pokoju: ${room.id_room})`;
-            roomSelect.appendChild(options);
+            const option = document.createElement('option');
+            option.value = room.id_room;
+            option.textContent = `${room.description} (Numer pokoju: ${room.id_room})`;
+            roomSelect.appendChild(option);
         });
     }
 }
+
 

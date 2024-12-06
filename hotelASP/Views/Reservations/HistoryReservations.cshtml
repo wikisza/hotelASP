@@ -15,21 +15,18 @@
 		<thead>
 			<tr>
 				<th>
-					@Html.DisplayNameFor(model => model.Date_from)
+					Data rozpoczęcia pobytu
 				</th>
 				<th>
-					@Html.DisplayNameFor(model => model.Date_to)
+					Data zakończenia pobytu
 				</th>
 				<th>
-					@Html.DisplayNameFor(model => model.First_name)
+					Imię i nazwisko
 				</th>
 				<th>
-					@Html.DisplayNameFor(model => model.Last_name)
+					Numer pokoju
 				</th>
-				<th>
-					@Html.DisplayNameFor(model => model.Id_room)
-				</th>
-				<th></th>
+				<th>Opcje</th>
 			</tr>
 		</thead>
 		<tbody>
@@ -43,10 +40,7 @@
 						@Html.DisplayFor(modelItem => item.Date_to)
 					</td>
 					<td>
-						@Html.DisplayFor(modelItem => item.First_name)
-					</td>
-					<td>
-						@Html.DisplayFor(modelItem => item.Last_name)
+						@Html.DisplayFor(modelItem => item.First_name) @Html.DisplayFor(modelItem => item.Last_name)
 					</td>
 					<td>
 						@Html.DisplayFor(modelItem => item.Id_room)

@@ -32,17 +32,15 @@ namespace hotelASP.Controllers
 		{
 			var now = DateTime.Now;
 
-			// Pobranie wszystkich pokoi
 			var rooms = await _context.Room.ToListAsync();
 
 			foreach (var room in rooms)
 			{
-				// Sprawdzenie, czy pokój ma trwającą rezerwację
 				var hasActiveReservation = await _context.Reservations
 					.AnyAsync(reservation =>
 						reservation.Id_room == room.Id_room &&
 						reservation.Date_from <= now &&
-						reservation.Date_to.AddDays(1) >= now);
+						reservation.Date_to >= now);
 
 				if (hasActiveReservation)
 				{
@@ -52,9 +50,8 @@ namespace hotelASP.Controllers
 				{
 					room.Is_taken = 0;
 				}
-			}
 
-			// Zapisanie zmian w bazie danych
+			}
 			await _context.SaveChangesAsync();
 
 			return RedirectToAction(nameof(Index));

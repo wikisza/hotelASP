@@ -23,7 +23,7 @@ namespace hotelASP.Controllers
         {
             var now = DateTime.Now;
             var reservations = _context.Reservations
-                .Where(r => r.Date_to > now) // Uwzględnienie dokładnej godziny
+                .Where(r => r.Date_to > now) 
                 .Select(r => new
                 {
                     start = r.Date_from.Date.AddHours(14).ToString("yyyy-MM-ddTHH:mm:ss"),
@@ -59,7 +59,6 @@ namespace hotelASP.Controllers
         [HttpGet]
 		public async Task<JsonResult> GetAvailableRooms(DateTime dateFrom, DateTime dateTo)
 		{
-			// Pobierz pokoje, które nie są zajęte w podanym zakresie dat
 			var availableRooms = await _context.Room
 				.Where(room => !_context.Reservations
 					.Any(reservation =>

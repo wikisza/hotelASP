@@ -57,7 +57,7 @@ document.addEventListener('DOMContentLoaded', function () {
         },
         
         eventClick: function (info) {
-            const modal = document.createElement('div');
+            const modal = document.getElementById('reservationModal');
             modal.className = 'modal';
             modal.style.position = 'fixed';
             modal.style.left = '50%';
@@ -69,25 +69,27 @@ document.addEventListener('DOMContentLoaded', function () {
             modal.style.borderRadius = '8px';
             modal.style.zIndex = '1000';
 
-            modal.innerHTML = `
-                <h3>Informacje o rezerwacji</h3>
-                <p><strong>Tytuł:</strong> ${info.event.title}</p>
-                <p><strong>Data rozpoczęcia:</strong> ${new Date(info.event.start).toLocaleString()}</p>
-                <p><strong>Data zakończenia:</strong> ${new Date(info.event.end).toLocaleString()}</p>
-                <p><strong>Opis:</strong> ${info.event.extendedProps.description || 'Brak opisu'}</p>
-                <button id="closeModal" style="margin-top: 10px;">Zamknij</button>
-            `;
+            document.getElementById('reservationTitle').innerText = info.event.title;
+            document.getElementById('reservationStart').innerText = new Date(info.event.start).toLocaleString();
+            document.getElementById('reservationEnd').innerText = info.event.end ? new Date(info.event.end).toLocaleString() : 'Brak';
+            document.getElementById('reservationDescription').innerText = info.event.extendedProps.description || 'Brak opisu';
 
-            document.body.appendChild(modal);
+            document.getElementById('reservationModal').style.display = "block";
 
             document.getElementById('closeModal').addEventListener('click', function () {
-                document.body.removeChild(modal);
+                document.getElementById('reservationModal').style.display = 'none';
             });
+
         }
     });
 
     calendar.render();
+
+
+
 });
+
+
 
 document.addEventListener('DOMContentLoaded', () => {
     const dateFromInput = document.getElementById('dateFrom');

@@ -5,9 +5,9 @@ namespace hotelASP.Models
     public class Room
     {
         [Key]
-        public int Id_room { get; set; }
+        public int IdRoom { get; set; }
         public required float Price { get; set; }
         public required string Description { get; set; }
-        public int Is_taken { get; set; }
+        public int IsTaken { get; set; }
     }
 }

@@ -30,7 +30,7 @@
 			{
 				<tr>
 					<td>
-						@Html.DisplayFor(modelItem => item.Id_room)
+						@Html.DisplayFor(modelItem => item.IdRoom)
 					</td>
 					<td>
 						@Html.DisplayFor(modelItem => item.Description)
@@ -40,7 +40,7 @@
 					</td>
 					<td>
 						@{
-							if (item.Is_taken == 0)
+							if (item.IsTaken == 0)
 							{
 								<span style="color:green;">Wolny</span>
 							}
@@ -52,9 +52,9 @@
 					</td>
 
 					<td>
-						<a asp-action="Edit" asp-route-id="@item.Id_room">Edit</a> |
-						<a asp-action="Details" asp-route-id="@item.Id_room">Details</a> |
-						<a asp-action="Delete" asp-route-id="@item.Id_room">Delete</a>
+						<a asp-action="Edit" asp-route-id="@item.IdRoom">Edit</a> |
+						<a asp-action="Details" asp-route-id="@item.IdRoom">Details</a> |
+						<a asp-action="Delete" asp-route-id="@item.IdRoom">Delete</a>
 					</td>
 				</tr>
 			}

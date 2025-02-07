@@ -38,17 +38,17 @@ namespace hotelASP.Controllers
 			{
 				var hasActiveReservation = await _context.Reservations
 					.AnyAsync(reservation =>
-						reservation.Id_room == room.Id_room &&
+						reservation.Id_room == room.IdRoom &&
 						reservation.Date_from <= now &&
 						reservation.Date_to >= now);
 
 				if (hasActiveReservation)
 				{
-					room.Is_taken = 1;
+					room.IsTaken = 1;
 				}
 				else
 				{
-					room.Is_taken = 0;
+					room.IsTaken = 0;
 				}
 
 			}
@@ -66,7 +66,7 @@ namespace hotelASP.Controllers
             }
 
             var room = await _context.Room
-                .FirstOrDefaultAsync(m => m.Id_room == id);
+                .FirstOrDefaultAsync(m => m.IdRoom == id);
             if (room == null)
             {
                 return NotFound();
@@ -118,7 +118,7 @@ namespace hotelASP.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(int id, [Bind("Id_room,Description, Is_taken, Price")] Room room)
         {
-            if (id != room.Id_room)
+            if (id != room.IdRoom)
             {
                 return NotFound();
             }
@@ -132,7 +132,7 @@ namespace hotelASP.Controllers
                 }
                 catch (DbUpdateConcurrencyException)
                 {
-                    if (!RoomExists(room.Id_room))
+                    if (!RoomExists(room.IdRoom))
                     {
                         return NotFound();
                     }
@@ -155,7 +155,7 @@ namespace hotelASP.Controllers
             }
 
             var room = await _context.Room
-                .FirstOrDefaultAsync(m => m.Id_room == id);
+                .FirstOrDefaultAsync(m => m.IdRoom == id);
             if (room == null)
             {
                 return NotFound();
@@ -181,7 +181,7 @@ namespace hotelASP.Controllers
 
         private bool RoomExists(int id)
         {
-            return _context.Room.Any(e => e.Id_room == id);
+            return _context.Room.Any(e => e.IdRoom == id);
         }
     }
 }

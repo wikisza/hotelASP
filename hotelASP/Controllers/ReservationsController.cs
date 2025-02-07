@@ -62,12 +62,12 @@ namespace hotelASP.Controllers
 			var availableRooms = await _context.Room
 				.Where(room => !_context.Reservations
 					.Any(reservation =>
-						reservation.Id_room == room.Id_room &&
+						reservation.Id_room == room.IdRoom &&
 						reservation.Date_from < dateTo &&
 						reservation.Date_to > dateFrom))
 				.Select(room => new
 				{
-					room.Id_room,
+					room.IdRoom,
 					room.Description
 				})
 				.ToListAsync();

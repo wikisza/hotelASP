@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using hotelASP.Data;
 
@@ -11,9 +12,11 @@ using hotelASP.Data;
 namespace hotelASP.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20250207134230_rooms")]
+    partial class rooms
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -144,23 +147,23 @@ namespace hotelASP.Migrations
 
             modelBuilder.Entity("hotelASP.Models.Room", b =>
                 {
-                    b.Property<int>("IdRoom")
+                    b.Property<int>("Id_room")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
-                    MySqlPropertyBuilderExtensions.UseMySqlIdentityColumn(b.Property<int>("IdRoom"));
+                    MySqlPropertyBuilderExtensions.UseMySqlIdentityColumn(b.Property<int>("Id_room"));
 
                     b.Property<string>("Description")
                         .IsRequired()
                         .HasColumnType("longtext");
 
-                    b.Property<int>("IsTaken")
+                    b.Property<int>("Is_taken")
                         .HasColumnType("int");
 
                     b.Property<float>("Price")
                         .HasColumnType("float");
 
-                    b.HasKey("IdRoom");
+                    b.HasKey("Id_room");
 
                     b.ToTable("Room");
                 });

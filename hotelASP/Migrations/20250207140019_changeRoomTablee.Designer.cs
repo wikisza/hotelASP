@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using hotelASP.Data;
 
@@ -11,9 +12,11 @@ using hotelASP.Data;
 namespace hotelASP.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20250207140019_changeRoomTablee")]
+    partial class changeRoomTablee
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -154,23 +157,11 @@ namespace hotelASP.Migrations
                         .IsRequired()
                         .HasColumnType("longtext");
 
-                    b.Property<int>("FloorNumber")
-                        .HasColumnType("int");
-
-                    b.Property<int>("IdStandard")
-                        .HasColumnType("int");
-
-                    b.Property<int>("IdType")
-                        .HasColumnType("int");
-
                     b.Property<int>("IsTaken")
                         .HasColumnType("int");
 
                     b.Property<float>("Price")
                         .HasColumnType("float");
-
-                    b.Property<int>("RoomNumber")
-                        .HasColumnType("int");
 
                     b.HasKey("IdRoom");
 

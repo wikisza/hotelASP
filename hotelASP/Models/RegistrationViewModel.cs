@@ -27,5 +27,8 @@ namespace hotelASP.Models
         [Compare("Password", ErrorMessage = "Sprawdź swoje hasło.")]
         [DataType(DataType.Password)]
         public string ConfirmPassword { get; set; }
+
+        [Required(ErrorMessage ="Wymagane jest stanowisko pracy.")]
+        public string Role {  get; set; }
     }
 }

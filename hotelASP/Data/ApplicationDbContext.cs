@@ -21,6 +21,8 @@ namespace hotelASP.Data
 
         public DbSet<UserAccount> Users { get; set; }
         public DbSet<Room> Room { get; set; } 
+        public DbSet<RoomType> Types { get; set; }
+        public DbSet<Standard> Standards { get; set; }
         public DbSet<Reservation> Reservations { get; set; }
         public DbSet<hotelASP.Models.RegistrationViewModel> RegistrationViewModel { get; set; } = default!;
         public DbSet<hotelASP.Models.LoginViewModel> LoginViewModel { get; set; } = default!;

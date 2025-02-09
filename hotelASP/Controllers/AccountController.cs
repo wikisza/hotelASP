@@ -38,6 +38,7 @@ namespace hotelASP.Controllers
                 account.LastName = model.LastName;
                 account.Password = model.Password;
                 account.Username = model.Username;
+                account.Role = model.Role;
 
                 try
                 {

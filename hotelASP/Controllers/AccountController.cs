@@ -18,7 +18,33 @@ namespace hotelASP.Controllers
         {
             _context = context;
         }
-        public IActionResult Index()
+        public async Task<IActionResult> Index()
+        {
+            var users = await _context.Users
+            .Include(u => u.Role)
+            .ToListAsync();
+
+            return View(users);
+        }
+
+        public async Task<IActionResult> Edit(int? id)
+        {
+            if (id == null)
+            {
+                return NotFound();
+            }
+
+            var user = await _context.Users
+                .FindAsync(id);
+
+            if (user == null)
+            {
+                return NotFound();
+            }
+            return View(user);
+        }
+        
+        public IActionResult Home()
         {
             return RedirectToAction("Index", "Home");
         }
@@ -91,7 +117,7 @@ namespace hotelASP.Controllers
                     var claimsIdentity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);
                     HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, new ClaimsPrincipal(claimsIdentity));
 
-                    return RedirectToAction("Index");
+                    return RedirectToAction("Home");
                 }
                 else
                 {

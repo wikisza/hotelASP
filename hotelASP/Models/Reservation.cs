@@ -11,9 +11,9 @@ namespace hotelASP.Models
 		[Required]
 		public DateTime Date_to { get; set; }
 		[Required]
-		public string First_name { get; set; }
+		public required string First_name { get; set; }
 		[Required]
-		public string Last_name { get; set; }
+		public required string Last_name { get; set; }
 		[Required]
 		public int Id_room { get; set; }
 	}

@@ -1,4 +1,6 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using hotelASP.Models;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
 using System.ComponentModel.DataAnnotations;
 
 namespace hotelASP.Entities
@@ -9,8 +11,8 @@ namespace hotelASP.Entities
     {
         [Key]
         public int Id { get; set; }
-        [Required]
         [MaxLength(50)]
+        [Required]
         public string FirstName { get; set; }
         [Required]
         [MaxLength(50)]
@@ -23,7 +25,8 @@ namespace hotelASP.Entities
         [Required]
         public string Password { get; set; }
         [Required]
-        public string Role { get; set; }
+        public int RoleId { get; set; }
+        public Role Role { get; set; }
 
     }
 }

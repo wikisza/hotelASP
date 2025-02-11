@@ -6,7 +6,8 @@ namespace hotelASP.Models
     {
         [Key]
         public int IdStandard { get; set; }
-        public string StandardName { get; set; }
+        [Required]
+        public required string StandardName { get; set; }
         public float StandardValue { get; set; }
     }
 }

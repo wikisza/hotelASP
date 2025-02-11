@@ -11,6 +11,7 @@ namespace hotelASP.Models
         public int IdType { get; set; }
         public int FloorNumber { get; set; }
         public required float Price { get; set; }
+        [Required]
         public required string Description { get; set; }
         public int IsTaken { get; set; }
     }

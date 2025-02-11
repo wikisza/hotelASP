@@ -12,8 +12,8 @@ using hotelASP.Data;
 namespace hotelASP.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20250207134230_rooms")]
-    partial class rooms
+    [Migration("20250211184105_deletedViewModelsFromDbConetxt")]
+    partial class deletedViewModelsFromDbConetxt
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -52,6 +52,10 @@ namespace hotelASP.Migrations
                         .IsRequired()
                         .HasColumnType("longtext");
 
+                    b.Property<string>("Role")
+                        .IsRequired()
+                        .HasColumnType("longtext");
+
                     b.Property<string>("Username")
                         .IsRequired()
                         .HasMaxLength(50)
@@ -66,53 +70,6 @@ namespace hotelASP.Migrations
                         .IsUnique();
 
                     b.ToTable("Users");
-                });
-
-            modelBuilder.Entity("hotelASP.Models.LoginViewModel", b =>
-                {
-                    b.Property<string>("Password")
-                        .IsRequired()
-                        .HasColumnType("longtext");
-
-                    b.Property<string>("UsernameOrEmail")
-                        .IsRequired()
-                        .HasMaxLength(50)
-                        .HasColumnType("varchar(50)");
-
-                    b.ToTable("LoginViewModel");
-                });
-
-            modelBuilder.Entity("hotelASP.Models.RegistrationViewModel", b =>
-                {
-                    b.Property<string>("ConfirmPassword")
-                        .IsRequired()
-                        .HasColumnType("longtext");
-
-                    b.Property<string>("Email")
-                        .IsRequired()
-                        .HasMaxLength(100)
-                        .HasColumnType("varchar(100)");
-
-                    b.Property<string>("FirstName")
-                        .IsRequired()
-                        .HasMaxLength(50)
-                        .HasColumnType("varchar(50)");
-
-                    b.Property<string>("LastName")
-                        .IsRequired()
-                        .HasMaxLength(50)
-                        .HasColumnType("varchar(50)");
-
-                    b.Property<string>("Password")
-                        .IsRequired()
-                        .HasColumnType("longtext");
-
-                    b.Property<string>("Username")
-                        .IsRequired()
-                        .HasMaxLength(20)
-                        .HasColumnType("varchar(20)");
-
-                    b.ToTable("RegistrationViewModel");
                 });
 
             modelBuilder.Entity("hotelASP.Models.Reservation", b =>
@@ -147,25 +104,79 @@ namespace hotelASP.Migrations
 
             modelBuilder.Entity("hotelASP.Models.Room", b =>
                 {
-                    b.Property<int>("Id_room")
+                    b.Property<int>("IdRoom")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
-                    MySqlPropertyBuilderExtensions.UseMySqlIdentityColumn(b.Property<int>("Id_room"));
+                    MySqlPropertyBuilderExtensions.UseMySqlIdentityColumn(b.Property<int>("IdRoom"));
 
                     b.Property<string>("Description")
                         .IsRequired()
                         .HasColumnType("longtext");
 
-                    b.Property<int>("Is_taken")
+                    b.Property<int>("FloorNumber")
+                        .HasColumnType("int");
+
+                    b.Property<int>("IdStandard")
+                        .HasColumnType("int");
+
+                    b.Property<int>("IdType")
+                        .HasColumnType("int");
+
+                    b.Property<int>("IsTaken")
                         .HasColumnType("int");
 
                     b.Property<float>("Price")
                         .HasColumnType("float");
 
-                    b.HasKey("Id_room");
+                    b.Property<int>("RoomNumber")
+                        .HasColumnType("int");
+
+                    b.HasKey("IdRoom");
 
                     b.ToTable("Room");
+                });
+
+            modelBuilder.Entity("hotelASP.Models.RoomType", b =>
+                {
+                    b.Property<int>("IdType")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    MySqlPropertyBuilderExtensions.UseMySqlIdentityColumn(b.Property<int>("IdType"));
+
+                    b.Property<float>("BasePrice")
+                        .HasColumnType("float");
+
+                    b.Property<int>("BedNumber")
+                        .HasColumnType("int");
+
+                    b.Property<int>("PeopleNumber")
+                        .HasColumnType("int");
+
+                    b.HasKey("IdType");
+
+                    b.ToTable("Types");
+                });
+
+            modelBuilder.Entity("hotelASP.Models.Standard", b =>
+                {
+                    b.Property<int>("IdStandard")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    MySqlPropertyBuilderExtensions.UseMySqlIdentityColumn(b.Property<int>("IdStandard"));
+
+                    b.Property<string>("StandardName")
+                        .IsRequired()
+                        .HasColumnType("longtext");
+
+                    b.Property<float>("StandardValue")
+                        .HasColumnType("float");
+
+                    b.HasKey("IdStandard");
+
+                    b.ToTable("Standards");
                 });
 #pragma warning restore 612, 618
         }

@@ -48,19 +48,12 @@
 
             <div class="form-group">
                 <label class="control-label">Podaj stanowisko</label>
-                <select asp-for="Role">
-                    <option value="manager">Menedżer</option>
-                    <option value="receptionist">Recepcjonista</option>
-                    <option value="houseKeeper">Pracownik sprzątający</option>
-                    <option value="roomAttendant">Pracownik obsługi pokoi</option>
-                    <option value="chef">Szef kuchni</option>
-                    <option value="cook">Kucharz</option>
-                    <option value="waiter">Kelner</option>
-                    <option value="technician">Technik</option>
-                    <option value="securityGuard">Ochrona</option>
+                <select asp-for="RoleId" class="form-control" asp-items="@(new SelectList(ViewBag.Roles, "Id", "Name"))">
+                    <option value="">Wybierz rolę</option>
                 </select>
-                <span asp-validation-for="Role" class="text-danger"></span>
+                <span asp-validation-for="RoleId" class="text-danger"></span>
             </div>
+
             <div class="form-group">
                 <input type="submit" value="Register" class="btn btn-primary" />
             </div>

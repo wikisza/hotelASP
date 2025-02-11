@@ -29,6 +29,6 @@ namespace hotelASP.Models
         public string ConfirmPassword { get; set; }
 
         [Required(ErrorMessage ="Wymagane jest stanowisko pracy.")]
-        public string Role {  get; set; }
+        public int RoleId { get; set; }
     }
 }

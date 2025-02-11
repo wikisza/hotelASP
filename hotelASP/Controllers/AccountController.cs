@@ -25,42 +25,42 @@ namespace hotelASP.Controllers
 
         public IActionResult Registration()
         {
+            ViewBag.Roles = _context.Roles.ToList();
             return View();
         }
 
         [HttpPost]
         public IActionResult Registration(RegistrationViewModel model)
         {
-            if (ModelState.IsValid) { 
-                UserAccount account = new UserAccount();    
-                account.Email = model.Email;
-                account.FirstName = model.FirstName;
-                account.LastName = model.LastName;
-                account.Password = model.Password;
-                account.Username = model.Username;
-                account.Role = model.Role;
-
-                try
+            if (ModelState.IsValid) {
+                var existingUser = _context.Users.Any(u => u.Email == model.Email || u.Username == model.Username);
+                if (existingUser)
                 {
-                    _context.Users.Add(account);
-                    _context.SaveChanges();
-
-                    ModelState.Clear();
-                    ViewBag.Message = $"Użytkownika {account.FirstName} {account.LastName} zarejestrowano pomyślnie. Proszę zaloguj się.";
+                    ModelState.AddModelError("", "Email lub nazwa użytkownika już istnieje.");
+                    ViewBag.Roles = _context.Roles.ToList();
+                    return View(model);
                 }
-                catch (DbUpdateException ex)
+
+                UserAccount account = new UserAccount
                 {
-					if (_context.Users.Any(u => u.Email == model.Email || u.Username == model.Username))
-					{
-						ModelState.AddModelError("", "Email lub nazwa użytkownika już istnieje.");
-						return View(model);
-					}
-				}
+                    Email = model.Email,
+                    FirstName = model.FirstName,
+                    LastName = model.LastName,
+                    Password = model.Password,
+                    Username = model.Username,
+                    RoleId = model.RoleId
+                };
 
-                return View();
+                _context.Users.Add(account);
+                _context.SaveChanges();
 
+                ModelState.Clear();
+                ViewBag.Message = $"Użytkownika {account.FirstName} {account.LastName} zarejestrowano pomyślnie. Proszę zaloguj się.";
+                ViewBag.Roles = _context.Roles.ToList();
             }
+
             return View(model);
+
         }
 
 
@@ -74,7 +74,9 @@ namespace hotelASP.Controllers
         {
             if (ModelState.IsValid) 
             {
-                var user = _context.Users.Where(x => (x.Username == model.UsernameOrEmail || x.Email == model.UsernameOrEmail) && x.Password == model.Password).FirstOrDefault();
+                var user = _context.Users
+                    .Include(u => u.Role)
+                    .Where(x => (x.Username == model.UsernameOrEmail || x.Email == model.UsernameOrEmail) && x.Password == model.Password).FirstOrDefault();
                 if (user != null)
                 {
                     //success
@@ -83,7 +85,7 @@ namespace hotelASP.Controllers
                         new Claim(ClaimTypes.Name, user.Username),
                         new Claim("Name", user.FirstName),
                         new Claim(ClaimTypes.Email, user.Email),
-                        new Claim(ClaimTypes.Role, "user"),
+                        new Claim(ClaimTypes.Role, user.Role.Name),
                     };
 
                     var claimsIdentity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);

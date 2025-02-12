@@ -4,12 +4,15 @@
     ViewData["Title"] = "Lista kont";
 }
 
+<div class="usersContainer">
+
 <h1>Lista kont</h1>
 
 <p>
-    <a asp-asp-controller="Account" asp-action="Registration">Rejestracja</a>
+    <a asp-asp-controller="Account" asp-action="Registration" class="loginBtn">Rejestracja nowego konta</a>
 </p>
-<table class="table">
+
+<table class="usersTable">
     <thead>
         <tr>
             <th>
@@ -64,3 +67,4 @@
         }
     </tbody>
 </table>
+</div>

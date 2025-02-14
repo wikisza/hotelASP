@@ -152,6 +152,7 @@ input, .loginBtn {
 
 .loginBtn {
     cursor: pointer;
+    text-decoration:none;
 }
 
 .loginBtn:hover {
@@ -259,3 +260,9 @@ tbody tr:hover{
     align-items:center;
 }
     
+.usersContainer{
+    display:flex;
+    justify-content:center;
+    flex-direction:column;
+    align-items:center;
+}

@@ -4,12 +4,15 @@
     ViewData["Title"] = "Lista kont";
 }
 
+<div class="usersContainer">
+
 <h1>Lista kont</h1>
 
 <p>
-    <a asp-asp-controller="Account" asp-action="Registration">Rejestracja</a>
+    <a asp-asp-controller="Account" asp-action="Registration" class="loginBtn">Rejestracja nowego konta</a>
 </p>
-<table class="table">
+
+<table class="usersTable">
     <thead>
         <tr>
             <th>
@@ -23,9 +26,6 @@
             </th>
             <th>
                 @Html.DisplayNameFor(model => model.Username)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Password)
             </th>
             <th>
                 @Html.DisplayNameFor(model => model.Role)
@@ -50,9 +50,6 @@
                     @Html.DisplayFor(modelItem => item.Username)
                 </td>
                 <td>
-                    @Html.DisplayFor(modelItem => item.Password)
-                </td>
-                <td>
                     @Html.DisplayFor(modelItem => item.Role.Name)
                 </td>
                 <td>
@@ -64,3 +61,4 @@
         }
     </tbody>
 </table>
+</div>

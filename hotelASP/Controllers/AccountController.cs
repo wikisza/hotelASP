@@ -41,7 +41,59 @@ namespace hotelASP.Controllers
             {
                 return NotFound();
             }
+
+            ViewBag.Roles = _context.Roles.ToList();
             return View(user);
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Edit(int id, [Bind("Id, FirstName, LastName, Email, Username, RoleId")] UserAccount account)
+        {
+
+            if (id != account.Id)
+            {
+                return NotFound();
+            }
+
+            if (ModelState.IsValid)
+            {
+                try
+                {
+                    var existingUser = await _context.Users.FindAsync(id);
+
+                    if (existingUser == null)
+                    {
+                        return NotFound();
+                    }
+                    existingUser.FirstName = account.FirstName;
+                    existingUser.LastName = account.LastName;
+                    existingUser.Email = account.Email;
+                    existingUser.Username = account.Username;
+                    existingUser.RoleId = account.RoleId;
+
+
+                    await _context.SaveChangesAsync();
+                }
+                catch (DbUpdateConcurrencyException)
+                {
+                    if (!AccountExists(account.Id))
+                    {
+                        return NotFound();
+                    }
+                    else
+                    {
+                        throw;
+                    }
+                }
+                return RedirectToAction(nameof(Index));
+            }
+            return RedirectToAction(nameof(Edit), new { id });
+        }
+
+        private bool AccountExists(int Id)
+        {
+            return _context.Users.Any(e => e.Id == Id);
         }
 
         public async Task<IActionResult> Details(int? Id)
@@ -107,7 +159,8 @@ namespace hotelASP.Controllers
         [HttpPost]
         public IActionResult Registration(RegistrationViewModel model)
         {
-            if (ModelState.IsValid) {
+            if (ModelState.IsValid)
+            {
                 var existingUser = _context.Users.Any(u => u.Email == model.Email || u.Username == model.Username);
                 if (existingUser)
                 {
@@ -140,14 +193,14 @@ namespace hotelASP.Controllers
 
 
         public IActionResult Login()
-        { 
+        {
             return View();
         }
 
         [HttpPost]
         public IActionResult Login(LoginViewModel model)
         {
-            if (ModelState.IsValid) 
+            if (ModelState.IsValid)
             {
                 var user = _context.Users
                     .Include(u => u.Role)

@@ -28,6 +28,9 @@ namespace hotelASP.Models
         [DataType(DataType.Password)]
         public string ConfirmPassword { get; set; }
 
+        [DataType(DataType.Date)]
+        public DateOnly CreateDate { get; set; }
+
         [Required(ErrorMessage ="Wymagane jest stanowisko pracy.")]
         public int RoleId { get; set; }
     }

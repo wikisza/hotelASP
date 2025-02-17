@@ -392,3 +392,10 @@ select:hover {
     font-style:italic;
     font-weight:900;
 }
+
+.deleteWindow{
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    flex-direction:column;
+}

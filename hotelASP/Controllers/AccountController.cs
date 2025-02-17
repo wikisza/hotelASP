@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using System.Security.Claims;
+using BCrypt.Net;
 
 namespace hotelASP.Controllers
 {
@@ -18,15 +19,18 @@ namespace hotelASP.Controllers
         {
             _context = context;
         }
+        [Authorize]
         public async Task<IActionResult> Index()
         {
             var users = await _context.Users
             .Include(u => u.Role)
             .ToListAsync();
 
+            ViewBag.Roles = _context.Roles.ToList();
+
             return View(users);
         }
-
+        [Authorize]
         public async Task<IActionResult> Edit(int? id)
         {
             if (id == null)
@@ -46,6 +50,7 @@ namespace hotelASP.Controllers
             return View(user);
         }
 
+        [Authorize]
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(int id, [Bind("Id, FirstName, LastName, Email, Username, RoleId")] UserAccount account)
@@ -95,7 +100,7 @@ namespace hotelASP.Controllers
         {
             return _context.Users.Any(e => e.Id == Id);
         }
-
+        [Authorize]
         public async Task<IActionResult> Details(int? Id)
         {
             if (Id == null)
@@ -113,7 +118,7 @@ namespace hotelASP.Controllers
 
             return View(account);
         }
-
+        [Authorize]
         public async Task<IActionResult> Delete(int? id)
         {
             if (id == null)
@@ -128,9 +133,11 @@ namespace hotelASP.Controllers
                 return NotFound();
             }
 
+            ViewBag.Roles = _context.Roles.ToList();
             return View(account);
         }
 
+        [Authorize]
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
@@ -145,6 +152,7 @@ namespace hotelASP.Controllers
             return RedirectToAction(nameof(Index));
         }
 
+        [Authorize]
         public IActionResult Home()
         {
             return RedirectToAction("Index", "Home");
@@ -168,14 +176,17 @@ namespace hotelASP.Controllers
                     ViewBag.Roles = _context.Roles.ToList();
                     return View(model);
                 }
+                string hashedPassword = BCrypt.Net.BCrypt.HashPassword(model.Password);
+                DateOnly date = DateOnly.FromDateTime(DateTime.Now);
 
                 UserAccount account = new UserAccount
                 {
                     Email = model.Email,
                     FirstName = model.FirstName,
                     LastName = model.LastName,
-                    Password = model.Password,
+                    Password = hashedPassword,
                     Username = model.Username,
+                    CreateDate = date,
                     RoleId = model.RoleId
                 };
 
@@ -204,8 +215,8 @@ namespace hotelASP.Controllers
             {
                 var user = _context.Users
                     .Include(u => u.Role)
-                    .Where(x => (x.Username == model.UsernameOrEmail || x.Email == model.UsernameOrEmail) && x.Password == model.Password).FirstOrDefault();
-                if (user != null)
+                    .Where(x => (x.Username == model.UsernameOrEmail || x.Email == model.UsernameOrEmail)).FirstOrDefault();
+                if (user != null|| !BCrypt.Net.BCrypt.Verify(model.Password, user.Password))
                 {
                     //success
                     var claims = new List<Claim>
@@ -214,6 +225,7 @@ namespace hotelASP.Controllers
                         new Claim("Name", user.FirstName),
                         new Claim(ClaimTypes.Email, user.Email),
                         new Claim(ClaimTypes.Role, user.Role.Name),
+                        new Claim("CreateAccount", user.CreateDate.ToString()),
                     };
 
                     var claimsIdentity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);

@@ -18,15 +18,18 @@ namespace hotelASP.Controllers
         {
             _context = context;
         }
+        [Authorize]
         public async Task<IActionResult> Index()
         {
             var users = await _context.Users
             .Include(u => u.Role)
             .ToListAsync();
 
+            ViewBag.Roles = _context.Roles.ToList();
+
             return View(users);
         }
-
+        [Authorize]
         public async Task<IActionResult> Edit(int? id)
         {
             if (id == null)
@@ -46,6 +49,7 @@ namespace hotelASP.Controllers
             return View(user);
         }
 
+        [Authorize]
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(int id, [Bind("Id, FirstName, LastName, Email, Username, RoleId")] UserAccount account)
@@ -95,7 +99,7 @@ namespace hotelASP.Controllers
         {
             return _context.Users.Any(e => e.Id == Id);
         }
-
+        [Authorize]
         public async Task<IActionResult> Details(int? Id)
         {
             if (Id == null)
@@ -113,7 +117,7 @@ namespace hotelASP.Controllers
 
             return View(account);
         }
-
+        [Authorize]
         public async Task<IActionResult> Delete(int? id)
         {
             if (id == null)
@@ -131,6 +135,7 @@ namespace hotelASP.Controllers
             return View(account);
         }
 
+        [Authorize]
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
@@ -145,6 +150,7 @@ namespace hotelASP.Controllers
             return RedirectToAction(nameof(Index));
         }
 
+        [Authorize]
         public IActionResult Home()
         {
             return RedirectToAction("Index", "Home");

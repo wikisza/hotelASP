@@ -387,3 +387,8 @@ select:hover {
     flex-direction: column;
     align-items: center;
 }
+
+.detailsHead{
+    font-style:italic;
+    font-weight:900;
+}

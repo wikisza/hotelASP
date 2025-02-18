@@ -18,12 +18,22 @@ namespace hotelASP.Data
             .WithMany(r => r.Users)
             .HasForeignKey(u => u.RoleId);
 
+            modelBuilder.Entity<Room>()
+                .HasOne(u => u.RoomType)
+                .WithMany(r => r.Rooms)
+                .HasForeignKey(u => u.IdType);
+
+            modelBuilder.Entity<Room>()
+                .HasOne(u => u.Standard)
+                .WithMany(r => r.Rooms)
+                .HasForeignKey(u => u.IdStandard);
+
             base.OnModelCreating(modelBuilder);
         }
 
         public DbSet<UserAccount> Users { get; set; }
         public DbSet<Role> Roles { get; set; }
-        public DbSet<Room> Room { get; set; } 
+        public DbSet<Room> Rooms { get; set; } 
         public DbSet<RoomType> Types { get; set; }
         public DbSet<Standard> Standards { get; set; }
         public DbSet<Reservation> Reservations { get; set; }

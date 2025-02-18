@@ -8,6 +8,7 @@ using Microsoft.EntityFrameworkCore;
 using hotelASP.Data;
 using hotelASP.Models;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.CodeAnalysis.CSharp.Syntax;
 
 namespace hotelASP.Controllers
 {
@@ -25,47 +26,47 @@ namespace hotelASP.Controllers
         public async Task<IActionResult> Index()
         {
             await UpdateRoomStatuses();
-            return View(await _context.Room.ToListAsync());
+            return View(await _context.Rooms.ToListAsync());
         }
 
-		public async Task<IActionResult> UpdateRoomStatuses()
-		{
-			var now = DateTime.Now;
+        public async Task<IActionResult> UpdateRoomStatuses()
+        {
+            var now = DateTime.Now;
 
-			var rooms = await _context.Room.ToListAsync();
+            var rooms = await _context.Rooms.ToListAsync();
 
-			foreach (var room in rooms)
-			{
-				var hasActiveReservation = await _context.Reservations
-					.AnyAsync(reservation =>
-						reservation.Id_room == room.IdRoom &&
-						reservation.Date_from <= now &&
-						reservation.Date_to >= now);
+            foreach (var room in rooms)
+            {
+                var hasActiveReservation = await _context.Reservations
+                    .AnyAsync(reservation =>
+                        reservation.Id_room == room.IdRoom &&
+                        reservation.Date_from <= now &&
+                        reservation.Date_to >= now);
 
-				if (hasActiveReservation)
-				{
-					room.IsTaken = 1;
-				}
-				else
-				{
-					room.IsTaken = 0;
-				}
+                if (hasActiveReservation)
+                {
+                    room.IsTaken = 1;
+                }
+                else
+                {
+                    room.IsTaken = 0;
+                }
 
-			}
-			await _context.SaveChangesAsync();
+            }
+            await _context.SaveChangesAsync();
 
-			return RedirectToAction(nameof(Index));
-		}
+            return RedirectToAction(nameof(Index));
+        }
 
-		// GET: Rooms/Details/5
-		public async Task<IActionResult> Details(int? id)
+        // GET: Rooms/Details/5
+        public async Task<IActionResult> Details(int? id)
         {
             if (id == null)
             {
                 return NotFound();
             }
 
-            var room = await _context.Room
+            var room = await _context.Rooms
                 .FirstOrDefaultAsync(m => m.IdRoom == id);
             if (room == null)
             {
@@ -75,22 +76,99 @@ namespace hotelASP.Controllers
             return View(room);
         }
 
-        // GET: Rooms/Create
-        public IActionResult Create()
+        public IActionResult CreateStandard()
         {
             return View();
         }
 
-
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id_room,Description, Is_taken, Price")] Room room)
+        public async Task<IActionResult> CreateStandard([Bind("IdStandard,StandardName,StandardValue")] Standard standard)
         {
             if (ModelState.IsValid)
             {
-                _context.Add(room);
+                _context.Standards.Add(standard);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
+            }
+            return RedirectToAction(nameof(CreateStandard));
+        }
+
+        public IActionResult CreateType()
+        {
+            return View();
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> CreateType([Bind("IdType,PeopleNumber,BedNumber,BasePrice")] RoomType type)
+        {
+            if (ModelState.IsValid)
+            {
+                _context.Add(type);
+                await _context.SaveChangesAsync();
+                return RedirectToAction(nameof(Index));
+            }
+            return View(type);
+        }
+
+        // GET: Rooms/Create
+        public IActionResult Create()
+        {
+            ViewBag.Types = _context.Types.ToList();
+            ViewBag.Standards = _context.Standards.ToList();
+            return View();
+        }
+
+        [Authorize]
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Create([Bind("IdRoom,RoomNumber, IdStandard, IdType, FloorNumber, Description, Price, IsTaken")] Room room)
+        {
+            if (ModelState.IsValid)
+            {
+                var existingRoom = _context.Rooms.Any(r => r.RoomNumber == room.RoomNumber);
+                if (existingRoom)
+                {
+                    ModelState.AddModelError("RoomNumber", "Pokój z tym numerem już istnieje.");
+                    return View(room);
+                }
+
+                var standardValue = _context.Standards
+                    .Where(s => s.IdStandard == room.IdStandard)
+                    .Select(s => s.StandardValue)
+                    .FirstOrDefault();
+
+                var typeValue = _context.Types
+                    .Where(t => t.IdType == room.IdType)
+                    .Select(t => t.BasePrice)
+                    .FirstOrDefault();
+
+                float finalPrice = standardValue * typeValue;
+
+
+                if (finalPrice != 0)
+                {
+                    Room newRoom = new Room
+                    {
+                        IdRoom = room.IdRoom,
+                        RoomNumber = room.RoomNumber,
+                        IdStandard = room.IdStandard,
+                        IdType = room.IdType,
+                        FloorNumber = room.FloorNumber,
+                        Description = room.Description,
+                        Price = finalPrice,
+                        IsTaken = 0
+                    };
+
+                    _context.Rooms.Add(newRoom);
+                    await _context.SaveChangesAsync();
+                    return RedirectToAction(nameof(Index));
+                }
+                else
+                {
+                    return View("Błąd przy dodawaniu pokoju", new ErrorViewModel());
+                }
             }
             return View(room);
         }
@@ -103,7 +181,7 @@ namespace hotelASP.Controllers
                 return NotFound();
             }
 
-            var room = await _context.Room.FindAsync(id);
+            var room = await _context.Rooms.FindAsync(id);
             if (room == null)
             {
                 return NotFound();
@@ -152,7 +230,7 @@ namespace hotelASP.Controllers
                 return NotFound();
             }
 
-            var room = await _context.Room
+            var room = await _context.Rooms
                 .FirstOrDefaultAsync(m => m.IdRoom == id);
             if (room == null)
             {
@@ -167,10 +245,10 @@ namespace hotelASP.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            var room = await _context.Room.FindAsync(id);
+            var room = await _context.Rooms.FindAsync(id);
             if (room != null)
             {
-                _context.Room.Remove(room);
+                _context.Rooms.Remove(room);
             }
 
             await _context.SaveChangesAsync();
@@ -179,7 +257,7 @@ namespace hotelASP.Controllers
 
         private bool RoomExists(int id)
         {
-            return _context.Room.Any(e => e.IdRoom == id);
+            return _context.Rooms.Any(e => e.IdRoom == id);
         }
     }
 }

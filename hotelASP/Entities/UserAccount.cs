@@ -23,11 +23,9 @@ namespace hotelASP.Entities
         [Required, MaxLength(50)]
         public string Username { get; set; }
         public string? Password { get; set; }
-        [Required]
         public DateOnly CreateDate { get; set; }
         [Required]
         public int RoleId { get; set; }
-        [Required]
         public Role? Role { get; set; }
 
     }

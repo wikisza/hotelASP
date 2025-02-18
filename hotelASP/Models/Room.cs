@@ -8,7 +8,9 @@ namespace hotelASP.Models
         public int IdRoom { get; set; }
         public int RoomNumber { get; set; }
         public int IdStandard { get; set; }
+        public Standard? Standard { get; set; }
         public int IdType { get; set; }
+        public RoomType? RoomType { get; set; }
         public int FloorNumber { get; set; }
         public required float Price { get; set; }
         [Required]

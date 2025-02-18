@@ -7,6 +7,8 @@
 @if(User.IsInRole("manager"))
 {
 	<a asp-controller="Rooms" asp-action="Create" class="loginBtn"> Dodaj pokój </a>
+	<a asp-controller="Rooms" asp-action="CreateStandard" class="loginBtn"> Dodaj standard </a>
+	<a asp-controller="Rooms" asp-action="CreateType" class="loginBtn"> Dodaj typ </a>
 }
 
 <div class="roomsTable">

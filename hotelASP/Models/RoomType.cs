@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using hotelASP.Entities;
+using System.ComponentModel.DataAnnotations;
 
 namespace hotelASP.Models
 {
@@ -9,5 +10,7 @@ namespace hotelASP.Models
         public int PeopleNumber { get; set; }
         public int BedNumber { get; set; }
         public float BasePrice { get; set; }
+
+        public ICollection<Room> Rooms { get; set; } = new List<Room>();
     }
 }

@@ -59,7 +59,7 @@ namespace hotelASP.Controllers
         [HttpGet]
 		public async Task<JsonResult> GetAvailableRooms(DateTime dateFrom, DateTime dateTo)
 		{
-			var availableRooms = await _context.Room
+			var availableRooms = await _context.Rooms
 				.Where(room => !_context.Reservations
 					.Any(reservation =>
 						reservation.Id_room == room.IdRoom &&

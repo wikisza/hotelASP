@@ -125,8 +125,8 @@ async function loadAvailableRooms() {
 
         rooms.forEach(room => {
             const option = document.createElement('option');
-            option.value = room.id_room;
-            option.textContent = `${room.description} (Numer pokoju: ${room.id_room})`;
+            option.value = room.idRoom;
+            option.textContent = `${room.description} (Numer pokoju: ${room.roomNumber})`;
             roomSelect.appendChild(option);
         });
     }

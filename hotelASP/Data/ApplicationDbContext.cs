@@ -28,6 +28,11 @@ namespace hotelASP.Data
                 .WithMany(r => r.Rooms)
                 .HasForeignKey(u => u.IdStandard);
 
+            modelBuilder.Entity<Reservation>()
+                .HasOne(u => u.Room)
+                .WithMany(r => r.Reservations)
+                .HasForeignKey(u => u.IdRoom);
+
             base.OnModelCreating(modelBuilder);
         }
 

@@ -16,5 +16,7 @@ namespace hotelASP.Models
         [Required]
         public required string Description { get; set; }
         public int IsTaken { get; set; }
+
+        public ICollection<Reservation> Reservations { get; set; } = new List<Reservation>();
     }
 }

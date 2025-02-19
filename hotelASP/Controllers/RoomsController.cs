@@ -39,7 +39,7 @@ namespace hotelASP.Controllers
             {
                 var hasActiveReservation = await _context.Reservations
                     .AnyAsync(reservation =>
-                        reservation.Id_room == room.IdRoom &&
+                        reservation.IdRoom == room.IdRoom &&
                         reservation.Date_from <= now &&
                         reservation.Date_to >= now);
 
@@ -192,7 +192,7 @@ namespace hotelASP.Controllers
         // POST: Rooms/Edit/5
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id_room,Description, Is_taken, Price")] Room room)
+        public async Task<IActionResult> Edit(int id, [Bind("IdRoom,Description, Is_taken, Price")] Room room)
         {
             if (id != room.IdRoom)
             {

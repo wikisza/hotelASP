@@ -23,14 +23,15 @@ namespace hotelASP.Controllers
         {
             var now = DateTime.Now;
             var reservations = _context.Reservations
-                .Where(r => r.Date_to > now) 
+                .Where(r => r.Date_to > now)
+                .Include(r => r.Room)
                 .Select(r => new
                 {
                     start = r.Date_from.Date.AddHours(14).ToString("yyyy-MM-ddTHH:mm:ss"),
                     end = r.Date_to.Date.AddHours(10).ToString("yyyy-MM-ddTHH:mm:ss"),
-                    title = r.First_name + ' ' + r.Last_name + ", pokój: " + r.Id_room,
-                    description = $"Pokój: {r.Id_room}",
-                    id_room = r.Id_room
+                    title = r.First_name + ' ' + r.Last_name + ", pokój: " + r.Room.RoomNumber,
+                    description = $"Pokój: {r.Room.RoomNumber}",
+                    IdRoom = r.IdRoom
                 })
                 .ToList();
 
@@ -47,9 +48,9 @@ namespace hotelASP.Controllers
                 {
                     start = r.Date_from.Date.AddHours(14).ToString("yyyy-MM-ddTHH:mm:ss"),
                     end = r.Date_to.Date.AddHours(10).ToString("yyyy-MM-ddTHH:mm:ss"),
-                    title = r.First_name + ' ' + r.Last_name + ", pokój: " + r.Id_room,
-                    description = $"Pokój: {r.Id_room}",
-                    id_room = r.Id_room
+                    title = r.First_name + ' ' + r.Last_name + ", pokój: " + r.IdRoom,
+                    description = $"Pokój: {r.IdRoom}",
+                    IdRoom = r.IdRoom
                 })
                 .ToList();
 
@@ -62,12 +63,13 @@ namespace hotelASP.Controllers
 			var availableRooms = await _context.Rooms
 				.Where(room => !_context.Reservations
 					.Any(reservation =>
-						reservation.Id_room == room.IdRoom &&
+						reservation.IdRoom == room.IdRoom &&
 						reservation.Date_from < dateTo &&
 						reservation.Date_to > dateFrom))
 				.Select(room => new
 				{
 					room.IdRoom,
+					room.RoomNumber,
 					room.Description
 				})
 				.ToListAsync();
@@ -132,7 +134,7 @@ namespace hotelASP.Controllers
 					CheckOut = r.Date_to.Date.AddHours(10),
 					r.First_name,
 					r.Last_name,
-					r.Id_room
+					r.IdRoom
 				})
 				.FirstOrDefaultAsync(m => m.Id_reservation == id);
 
@@ -153,7 +155,7 @@ namespace hotelASP.Controllers
 
 		[HttpPost]
 		[ValidateAntiForgeryToken]
-		public async Task<IActionResult> Create([Bind("Id_reservation,Date_from, Date_to, First_name, Last_name, Id_room")] Reservation reservation)
+		public async Task<IActionResult> Create([Bind("Id_reservation,Date_from, Date_to, First_name, Last_name, IdRoom")] Reservation reservation)
 		{
 			if (reservation.Date_from.TimeOfDay != new TimeSpan(14, 0, 0))
 			{
@@ -168,7 +170,7 @@ namespace hotelASP.Controllers
 			if (ModelState.IsValid)
 			{
 				var overlappingReservations = await _context.Reservations
-					.Where(r => r.Id_room == reservation.Id_room &&
+					.Where(r => r.IdRoom == reservation.IdRoom &&
 								r.Date_from < reservation.Date_to &&
 								r.Date_to > reservation.Date_from)
 					.ToListAsync();
@@ -205,7 +207,7 @@ namespace hotelASP.Controllers
 		// POST: Rooms/Edit/5
 		[HttpPost]
 		[ValidateAntiForgeryToken]
-		public async Task<IActionResult> Edit(int id, [Bind("Id_reservation,Date_from, Date_to, First_name, Last_name, Id_room")] Reservation reservation)
+		public async Task<IActionResult> Edit(int id, [Bind("Id_reservation,Date_from, Date_to, First_name, Last_name, IdRoom")] Reservation reservation)
 		{
 			if (id != reservation.Id_reservation)
 			{

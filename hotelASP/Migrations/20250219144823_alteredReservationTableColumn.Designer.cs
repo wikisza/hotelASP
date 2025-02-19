@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using hotelASP.Data;
 
@@ -11,9 +12,11 @@ using hotelASP.Data;
 namespace hotelASP.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20250219144823_alteredReservationTableColumn")]
+    partial class alteredReservationTableColumn
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -98,8 +101,6 @@ namespace hotelASP.Migrations
                         .HasColumnType("longtext");
 
                     b.HasKey("Id_reservation");
-
-                    b.HasIndex("IdRoom");
 
                     b.ToTable("Reservations");
                 });
@@ -214,17 +215,6 @@ namespace hotelASP.Migrations
                     b.Navigation("Role");
                 });
 
-            modelBuilder.Entity("hotelASP.Models.Reservation", b =>
-                {
-                    b.HasOne("hotelASP.Models.Room", "Room")
-                        .WithMany("Reservations")
-                        .HasForeignKey("IdRoom")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Room");
-                });
-
             modelBuilder.Entity("hotelASP.Models.Room", b =>
                 {
                     b.HasOne("hotelASP.Models.Standard", "Standard")
@@ -247,11 +237,6 @@ namespace hotelASP.Migrations
             modelBuilder.Entity("hotelASP.Models.Role", b =>
                 {
                     b.Navigation("Users");
-                });
-
-            modelBuilder.Entity("hotelASP.Models.Room", b =>
-                {
-                    b.Navigation("Reservations");
                 });
 
             modelBuilder.Entity("hotelASP.Models.RoomType", b =>
